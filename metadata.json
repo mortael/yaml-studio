@@ -1,0 +1,5 @@
+{
+  "name": "YAML Studio",
+  "description": "A lightweight, desktop-class YAML editor specialized for Docker Compose, featuring real-time validation, templates, and Gemini AI-powered generation and fixing.",
+  "requestFramePermissions": []
+}
