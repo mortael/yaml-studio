@@ -77,3 +77,32 @@ export const fixYamlWithAi = async (code: string, errorMessage: string): Promise
           throw error;
       }
 }
+
+export const convertCliToYaml = async (cliCommand: string): Promise<string> => {
+  const model = 'gemini-3-flash-preview';
+  
+  const systemInstruction = `You are a Docker expert. Convert the provided "docker run" command into a valid Docker Compose "services" YAML block.
+  
+  Rules:
+  1. Return ONLY the YAML content for the services block (do not include "version" or "services" keys unless necessary for context, but preferably just the service definition).
+  2. Use best practices (naming, indentation).
+  3. Do not include markdown formatting.
+  `;
+
+  const prompt = `Convert this command:\n${cliCommand}`;
+
+  try {
+     const response = await ai.models.generateContent({
+        model,
+        contents: prompt,
+        config: { systemInstruction, temperature: 0.1 }
+     });
+
+     let text = response.text || '';
+     text = text.replace(/^```yaml\n/, '').replace(/^```\n/, '').replace(/\n```$/, '');
+     return text.trim();
+  } catch (error) {
+      console.error("Gemini Conversion Error:", error);
+      throw new Error("Failed to convert command.");
+  }
+}

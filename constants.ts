@@ -178,3 +178,9 @@ export const COMMON_IMAGES = [
   'python:3.11-alpine', 'python:3.10-slim',
   'traefik:v2.10', 'rabbitmq:3-management'
 ];
+
+export const DOCKERFILE_INSTRUCTIONS = [
+  'FROM', 'RUN', 'CMD', 'LABEL', 'EXPOSE', 'ENV', 'ADD', 'COPY',
+  'ENTRYPOINT', 'VOLUME', 'USER', 'WORKDIR', 'ARG', 'ONBUILD', 'STOPSIGNAL',
+  'HEALTHCHECK', 'SHELL'
+];

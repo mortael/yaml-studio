@@ -44,6 +44,12 @@ const Statusbar: React.FC<StatusbarProps> = ({
       </div>
 
       <div className="flex items-center gap-6 text-gray-400 font-mono">
+        {typeof window !== 'undefined' && (window as any).__electrobun && (
+          <div className="flex items-center gap-2 text-emerald-400">
+            <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></div>
+            <span className="text-[10px] font-bold">NATIVE</span>
+          </div>
+        )}
         <span>Ln {cursorPosition?.lineNumber || 1}, Col {cursorPosition?.column || 1}</span>
         <span>{lineCount} Lines</span>
         <span>UTF-8</span>
