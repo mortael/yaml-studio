@@ -2,6 +2,12 @@
 
 This application is now ready to be built as a cross-platform desktop executable using Electrobun.
 
+## Project Structure
+
+- `src/bun/index.ts`: Main process entry point (Bun).
+- `electrobun.config.ts`: Electrobun configuration.
+- `App.tsx`, `index.tsx`, etc.: Web application source (React).
+
 ## Prerequisites
 
 - [Bun](https://bun.sh) installed on your system.
