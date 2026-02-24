@@ -8,9 +8,7 @@ const win = new Electrobun.BrowserWindow({
     x: 0,
     y: 0
   },
-  url: process.env.NODE_ENV === 'development' 
-    ? 'http://localhost:3000' 
-    : `file://${process.cwd()}/dist/index.html`,
+  url: 'views://main/index.html',
 });
 
 // In Electrobun, the app stays alive as long as there are windows or active listeners

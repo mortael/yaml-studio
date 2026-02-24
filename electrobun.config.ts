@@ -8,6 +8,11 @@ export default {
     bun: {
       entrypoint: 'src/bun/index.ts',
     },
+    views: {
+      main: {
+        entrypoint: 'index.tsx',
+      }
+    },
     buildFolder: 'out',
   }
 };
