@@ -5,12 +5,16 @@ This application is now ready to be built as a cross-platform desktop executable
 ## Project Structure
 
 - `src/bun/index.ts`: Main process entry point (Bun).
-- `electrobun.config.ts`: Electrobun configuration defining the `main` view.
-- `App.tsx`, `index.tsx`, etc.: Web application source (React).
+- `src/views/main/index.html`: View entry point.
+- `src/views/main/index.tsx`: React entry point.
+- `electrobun.config.ts`: Electrobun configuration.
 
 ## How it works
 
-The application uses Electrobun's native `views://` protocol. This eliminates the need for a separate HTTP server in production. Electrobun's built-in view system handles the bundling and serving of the React application.
+The application uses Electrobun's native `views://` protocol. 
+- **Main View**: Defined in `electrobun.config.ts` as `main`.
+- **URL**: Accessed via `views://main/index.html` in the main process.
+- **Bundling**: Electrobun automatically bundles the TypeScript code referenced in `index.html`.
 
 ## Prerequisites
 

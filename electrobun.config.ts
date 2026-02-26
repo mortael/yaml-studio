@@ -10,9 +10,10 @@ export default {
     },
     views: {
       main: {
-        entrypoint: 'index.tsx',
+        entrypoint: 'src/views/main/index.html',
       }
     },
+    targets: 'current',
     buildFolder: 'out',
   }
 };
