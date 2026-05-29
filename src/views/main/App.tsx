@@ -7,8 +7,8 @@ import AIPanel from './components/aipanel';
 import HistoryPanel from './components/historypanel';
 import CLIModal from './components/climodal';
 import { INITIAL_CONTENT, DOCKER_ROOT_KEYS, DOCKER_SERVICE_KEYS, COMMON_IMAGES, DOCKERFILE_INSTRUCTIONS } from './constants';
-import { validateYaml, formatYaml } from './services/yamlService';
-import { generateYamlFromPrompt, fixYamlWithAi, convertCliToYaml } from './services/geminiService';
+import { validateYaml, formatYaml } from './services/yamlservice';
+import { generateYamlFromPrompt, fixYamlWithAi, convertCliToYaml } from './services/geminiservice';
 import { Template, ValidationResult } from './types';
 
 interface HistoryState {
