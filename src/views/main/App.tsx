@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Editor, { OnMount } from '@monaco-editor/react';
-import Sidebar from './components/sidebar';
-import Toolbar from './components/toolbar';
-import Statusbar from './components/statusbar';
-import AIPanel from './components/aipanel';
-import HistoryPanel from './components/historypanel';
-import CLIModal from './components/climodal';
+import Sidebar from './components/Sidebar';
+import Toolbar from './components/Toolbar';
+import Statusbar from './components/Statusbar';
+import AIPanel from './components/AIPanel';
+import HistoryPanel from './components/HistoryPanel';
+import CLIModal from './components/CLIModal';
 import { INITIAL_CONTENT, DOCKER_ROOT_KEYS, DOCKER_SERVICE_KEYS, COMMON_IMAGES, DOCKERFILE_INSTRUCTIONS } from './constants';
-import { validateYaml, formatYaml } from './services/yamlservice';
-import { generateYamlFromPrompt, fixYamlWithAi, convertCliToYaml } from './services/geminiservice';
+import { validateYaml, formatYaml } from './services/yamlService';
+import { generateYamlFromPrompt, fixYamlWithAi, convertCliToYaml } from './services/geminiService';
 import { Template, ValidationResult } from './types';
 
 interface HistoryState {
