@@ -41,6 +41,34 @@ const App: React.FC = () => {
   const [historyIndex, setHistoryIndex] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Folder Import State
+  const [importedTemplates, setImportedTemplates] = useState<Template[] | null>(() => {
+    try {
+      const saved = localStorage.getItem('yaml_studio_imported_templates');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  const handleImportFolder = (templates: Template[]) => {
+    setImportedTemplates(templates);
+    try {
+      localStorage.setItem('yaml_studio_imported_templates', JSON.stringify(templates));
+    } catch (err) {
+      console.error('Error saving to localStorage:', err);
+    }
+  };
+
+  const handleResetTemplates = () => {
+    setImportedTemplates(null);
+    try {
+      localStorage.removeItem('yaml_studio_imported_templates');
+    } catch (err) {
+      console.error('Error removing from localStorage:', err);
+    }
+  };
+
   // Debounce for history and validation
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -355,6 +383,9 @@ const App: React.FC = () => {
         <Sidebar 
           isOpen={isSidebarOpen} 
           onSelectTemplate={handleTemplateSelect} 
+          importedTemplates={importedTemplates}
+          onImportFolder={handleImportFolder}
+          onResetTemplates={handleResetTemplates}
         />
         
         <div className="flex-1 flex flex-col relative h-full w-full bg-[#1e1e1e]">
