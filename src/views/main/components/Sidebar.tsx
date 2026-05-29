@@ -34,6 +34,28 @@ const Sidebar: React.FC<SidebarProps> = ({
     for (const fileObj of filesArray) {
       const file = fileObj as any;
       const path = file.webkitRelativePath || file.name;
+      
+      // Early exclusion guard: skip files inside common heavy directories
+      const pathLower = path.toLowerCase();
+      if (
+        pathLower.includes('/node_modules/') || 
+        pathLower.includes('\\node_modules\\') ||
+        pathLower.includes('/.git/') || 
+        pathLower.includes('\\.git\\') ||
+        pathLower.includes('/vendor/') ||
+        pathLower.includes('\\vendor\\') ||
+        pathLower.includes('/dist/') ||
+        pathLower.includes('\\dist\\') ||
+        pathLower.includes('/build/') ||
+        pathLower.includes('\\build\\') ||
+        pathLower.includes('/.next/') ||
+        pathLower.includes('\\.next\\') ||
+        pathLower.includes('/.nuxt/') ||
+        pathLower.includes('\\.nuxt\\')
+      ) {
+        continue;
+      }
+
       const parts = path.split(/[/\\]/);
       const fileName = parts[parts.length - 1].toLowerCase();
       
