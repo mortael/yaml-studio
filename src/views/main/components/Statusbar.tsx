@@ -6,17 +6,13 @@ interface StatusbarProps {
   error?: string;
   lineCount: number;
   cursorPosition?: { lineNumber: number; column: number };
-  onFixError: () => void;
-  isFixing: boolean;
 }
 
 const Statusbar: React.FC<StatusbarProps> = ({ 
   isValid, 
   error, 
   lineCount, 
-  cursorPosition,
-  onFixError,
-  isFixing
+  cursorPosition
 }) => {
   return (
     <div className={`h-8 border-t flex items-center justify-between px-4 text-xs select-none shrink-0 ${isValid ? 'bg-blue-950 border-blue-900' : 'bg-red-950 border-red-900'}`}>
@@ -28,13 +24,6 @@ const Statusbar: React.FC<StatusbarProps> = ({
                 <span className="text-red-300 truncate max-w-md font-mono" title={error}>
                     {error}
                 </span>
-                <button 
-                    onClick={onFixError}
-                    disabled={isFixing}
-                    className="ml-2 px-2 py-0.5 bg-red-800 hover:bg-red-700 text-white rounded text-[10px] font-bold uppercase tracking-wider disabled:opacity-50 transition-colors"
-                >
-                    {isFixing ? 'Fixing...' : 'Fix with AI'}
-                </button>
                 </>
             )}
             {isValid && (

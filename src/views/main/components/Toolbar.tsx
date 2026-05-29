@@ -1,8 +1,7 @@
 import React from 'react';
-import { Save, FolderOpen, Sparkles, Copy, Play, CheckCircle, AlertTriangle, Menu, Wand2, Terminal, Clock, RotateCcw, RotateCw, FileCode, FileJson } from 'lucide-react';
+import { Save, FolderOpen, Copy, Play, CheckCircle, AlertTriangle, Menu, Clock, RotateCcw, RotateCw, FileCode, FileJson } from 'lucide-react';
 
 interface ToolbarProps {
-  onGenerateAI: () => void;
   onFormat: () => void;
   onCopy: () => void;
   onSave: () => void;
@@ -10,16 +9,13 @@ interface ToolbarProps {
   onUndo: () => void;
   onRedo: () => void;
   onHistory: () => void;
-  onCliImport: () => void;
   toggleSidebar: () => void;
   isValid: boolean;
-  isAiLoading: boolean;
   language: 'yaml' | 'dockerfile';
   onLanguageChange: (lang: 'yaml' | 'dockerfile') => void;
 }
 
 const Toolbar: React.FC<ToolbarProps> = ({ 
-  onGenerateAI, 
   onFormat, 
   onCopy, 
   onSave,
@@ -27,10 +23,8 @@ const Toolbar: React.FC<ToolbarProps> = ({
   onUndo,
   onRedo,
   onHistory,
-  onCliImport,
   toggleSidebar,
   isValid,
-  isAiLoading,
   language,
   onLanguageChange
 }) => {
@@ -98,22 +92,12 @@ const Toolbar: React.FC<ToolbarProps> = ({
 
         <div className="h-6 w-px bg-gray-700 mx-2"></div>
 
-        {/* Tools Group */}
+        {/* Format Action */}
         <button 
-          onClick={onCliImport}
-          className="p-2 text-gray-400 hover:text-green-400 hover:bg-gray-800 rounded-md transition-colors"
-          title="Import from Docker CLI"
+          onClick={onFormat}
+          className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 text-gray-200 px-3 py-1.5 rounded-md text-sm font-medium transition-colors border border-gray-700 mr-2"
         >
-          <Terminal size={18} />
-        </button>
-
-        <button 
-          onClick={onGenerateAI}
-          disabled={isAiLoading}
-          className="flex items-center gap-2 bg-purple-600/90 hover:bg-purple-500 text-white px-3 py-1.5 rounded-md text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed mx-2"
-        >
-          {isAiLoading ? <Wand2 className="animate-spin" size={16} /> : <Sparkles size={16} />}
-          AI Assist
+          Format Code
         </button>
 
         <div className="h-6 w-px bg-gray-700 mx-2"></div>

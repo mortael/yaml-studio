@@ -3,12 +3,9 @@ import Editor, { OnMount } from '@monaco-editor/react';
 import Sidebar from './components/Sidebar';
 import Toolbar from './components/Toolbar';
 import Statusbar from './components/Statusbar';
-import AIPanel from './components/AIPanel';
 import HistoryPanel from './components/HistoryPanel';
-import CLIModal from './components/CLIModal';
 import { INITIAL_CONTENT, DOCKER_ROOT_KEYS, DOCKER_SERVICE_KEYS, COMMON_IMAGES, DOCKERFILE_INSTRUCTIONS } from './constants';
 import { validateYaml, formatYaml } from './services/yamlService';
-import { generateYamlFromPrompt, fixYamlWithAi, convertCliToYaml } from './services/geminiService';
 import { Template, ValidationResult } from './types';
 
 interface HistoryState {
@@ -23,13 +20,7 @@ const App: React.FC = () => {
   const [language, setLanguage] = useState<'yaml' | 'dockerfile'>('yaml');
   
   // Panels
-  const [isAiPanelOpen, setIsAiPanelOpen] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
-  const [isCliModalOpen, setIsCliModalOpen] = useState(false);
-
-  // Loading States
-  const [isAiLoading, setIsAiLoading] = useState(false);
-  const [isFixing, setIsFixing] = useState(false);
   
   // Editor
   const [editorInstance, setEditorInstance] = useState<any>(null);
@@ -286,71 +277,6 @@ const App: React.FC = () => {
     event.target.value = '';
   };
 
-  // AI & CLI
-  const handleAiGenerate = async (prompt: string) => {
-    setIsAiLoading(true);
-    try {
-      // TODO: Enhance AI service to support Dockerfile generation based on language state
-      // For now, assuming YAML context as per initial requirements
-      const generatedCode = await generateYamlFromPrompt(prompt, code);
-      updateCode(generatedCode);
-      setIsAiPanelOpen(false);
-    } catch (error) {
-      alert("Failed to generate code. Please try again.");
-    } finally {
-      setIsAiLoading(false);
-    }
-  };
-
-  const handleCliConvert = async (command: string) => {
-    setIsAiLoading(true);
-    try {
-      const yamlFragment = await convertCliToYaml(command);
-      
-      let newContent = code;
-      // If we are in Dockerfile mode, switch to YAML or warn?
-      // Since convertCliToYaml makes YAML, let's switch to YAML if needed or append if compatible.
-      // Usually users want this for compose.
-      if (language === 'dockerfile') {
-          if (window.confirm("CLI import generates Docker Compose YAML. Switch language to Compose?")) {
-              setLanguage('yaml');
-              // Append to empty or just set it
-              newContent = yamlFragment;
-          } else {
-               // Abort if user wants to stay in Dockerfile
-               setIsAiLoading(false);
-               return; 
-          }
-      } else {
-        if (code.includes('services:')) {
-            newContent = code.trimEnd() + '\n' + yamlFragment;
-        } else {
-            newContent = code + '\n' + yamlFragment;
-        }
-      }
-      
-      updateCode(newContent);
-      setIsCliModalOpen(false);
-    } catch (error) {
-      alert("Failed to convert command.");
-    } finally {
-      setIsAiLoading(false);
-    }
-  };
-
-  const handleFixError = async () => {
-    if (!validation.error) return;
-    setIsFixing(true);
-    try {
-        const fixed = await fixYamlWithAi(code, validation.error);
-        updateCode(fixed);
-    } catch (error) {
-        alert("Failed to fix YAML automatically.");
-    } finally {
-        setIsFixing(false);
-    }
-  };
-
   return (
     <div className="flex flex-col h-screen bg-gray-950 text-gray-100 font-sans overflow-hidden">
       <input 
@@ -363,7 +289,6 @@ const App: React.FC = () => {
       />
 
       <Toolbar 
-        onGenerateAI={() => setIsAiPanelOpen(true)}
         onFormat={handleFormat}
         onCopy={() => navigator.clipboard.writeText(code)}
         onSave={handleSave}
@@ -371,10 +296,8 @@ const App: React.FC = () => {
         onUndo={handleUndo}
         onRedo={handleRedo}
         onHistory={() => setIsHistoryOpen(!isHistoryOpen)}
-        onCliImport={() => setIsCliModalOpen(true)}
         toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
         isValid={validation.isValid}
-        isAiLoading={isAiLoading || isFixing}
         language={language}
         onLanguageChange={setLanguage}
       />
@@ -428,22 +351,6 @@ const App: React.FC = () => {
         error={validation.error}
         lineCount={code.split('\n').length}
         cursorPosition={cursorPosition}
-        onFixError={handleFixError}
-        isFixing={isFixing}
-      />
-
-      <AIPanel 
-        isOpen={isAiPanelOpen}
-        onClose={() => setIsAiPanelOpen(false)}
-        onGenerate={handleAiGenerate}
-        isLoading={isAiLoading}
-      />
-      
-      <CLIModal
-        isOpen={isCliModalOpen}
-        onClose={() => setIsCliModalOpen(false)}
-        onConvert={handleCliConvert}
-        isLoading={isAiLoading}
       />
     </div>
   );
